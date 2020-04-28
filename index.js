@@ -3,6 +3,9 @@ const cors = require('cors')
 const path = require('path').resolve()
 const https = require('https')
 const express = require('express')
+const session = require('express-session')
+const MemoryStore = require('memorystore')(session)
+const bodyParser = require('body-parser')
 const { Client } = require('discord.js')
 const DiscordOAuth2 = require('discord-oauth2')
 
@@ -10,6 +13,7 @@ const authCheck = require('./auth')
 // const pointModule = require('./modules/point')
 const commandModule = require('./modules/command')
 const webRouter = require('./modules/router')
+const dataMgr = require('./modules/dataManager')
 
 const settings = require(path + '/settings.json')
 const authData = require(path + '/auth/authData.json')
@@ -33,9 +37,29 @@ if (!settings.development) ssl = { cert: readFileSync(path + '/auth/teaddy-cert.
 
 const discordOAuth = new DiscordOAuth2()
 
+dataMgr.startAutosave()
+
 // Web
 app.set('view engine', 'ejs')
 app.set('views', './page')
+
+app.use(session({
+  name: 'teaddy-session',
+  resave: false,
+  saveUninitialized: false,
+  secret: 'keyboard cat', // TODO load from settings.json
+  store: new MemoryStore({
+    checkPeriod: 1000 * 3600 // 1 hour
+  })
+}))
+
+app.use(bodyParser.urlencoded({ extended: false }))
+
+// Include authData to req object
+app.use((req, _res, next) => {
+  req.dataMgr = dataMgr
+  next()
+})
 
 app.use(cors())
 app.use('/src', express.static(path + '/src'))
@@ -52,7 +76,7 @@ app.get('/oldlogin', async (req, res) => {
   } catch (err) {
     key = []
   }
-  res.render('login', { key, authUrl, authData, discordData })
+  res.render('oldlogin', { key, authUrl, authData, discordData })
 })
 
 app.get('/solve', (_req, res) => res.send({ items: ['discord', 'google'] }))
@@ -137,6 +161,7 @@ bot.login(settings.token)
     }
   })
 
+// TODO Delete
 setInterval(() => { writeFileSync(path + '/auth/authData.json', JSON.stringify(authData)) }, 1000)
 
 // Register Events

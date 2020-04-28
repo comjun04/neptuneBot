@@ -1,5 +1,11 @@
-* {
-  font-family: '맑은 고딕, MS Gothic';
+@font-face {
+  font-family: 'CookieRunOTF-Bold';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_twelve@1.0/CookieRunOTF-Bold00.woff') format('woff');   font-weight: normal;
+  font-style: normal;
+}
+
+html {
+  font-family: 'CookieRunOTF-Bold', 맑은 고딕, MS Gothic;
 }
 
 body, head {
@@ -93,8 +99,72 @@ body, head {
   display: block;
 }
 
+.title {
+  font-size: 50px;
+  padding: 20px
+}
+
 .card {
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
   /* transition: 0.3s; */
-  display: block
+  display: block;
+  padding: 8px 14px;
+}
+
+.right {
+  float: right;
+}
+
+main {
+  padding: 20px;
+}
+
+footer {
+  background-color: #ccc;
+  bottom: 0;
+  padding: 10px
+}
+
+/* Form: Full-width inputs */
+input[type=text], input[type=password], textarea {
+  width: 100%;
+  padding: 12px 10px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 2px solid #000;
+  box-sizing: border-box;
+  font-family: inherit;
+}
+
+/* Disable custom font */
+.default-text {
+  font-family: 맑은 고딕, MS Gothic;
+}
+
+/* Set a style for all buttons */
+button, .btn {
+  background-color: #4CAF50;
+  color: white;
+  display: inline-block;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  font-family: inherit;
+  text-decoration: none;
+}
+
+/* Link style */
+a {
+  color: black;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+}
+
+.btn-discord {
+  background-color: #7289da;
+  color: white;
 }

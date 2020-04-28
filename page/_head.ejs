@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Teaddy</title>
   <link rel="stylesheet" href="/src/css/main.css">
+  <% if(page === 'login') { %><link rel="stylesheet" href="/src/css/login.css"><% } %>
+  <% if(page === 'register') { %><link rel="stylesheet" href="/src/css/step.css"><% } %>
 </head>
 <body>
   <!-- header -->
@@ -18,7 +20,7 @@
         <span id="topbar_account_item" class="topbar-item nav-dropdown-keep-show">계정</span>
         <div id="topbar_account_content" class="nav-dropdown-content nav-dropdown-keep-show">
           <a href="./login" id="topbar_account_login" class="card">
-            <span>다양한 기능을 이용하시려면 <b>로그인</b>하세요.</span>
+            <span><% if(!id) { %>다양한 기능을 이용하시려면 <b><u>로그인</u></b>하세요.<% } else { %>현재 로그인된 id: <%= id %><% } %></span>
           </a>
         </div>
       </li>

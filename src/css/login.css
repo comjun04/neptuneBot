@@ -14,11 +14,6 @@
   box-shadow: 0px 0px 3px 0px rgba(0,0,0,0.75); 
 }
 
-.login-title {
-  font-family: 'Do Hyeon', sans-serif;
-  font-size: 50px;
-}
-
 .card {
   height: auto;
 
@@ -58,4 +53,10 @@
 .login-disable {
   opacity: 0.5;
   pointer-events: none;
+}
+
+/* New Website */
+#login-pwforgot {
+  float: right;
+  color: black;
 }
