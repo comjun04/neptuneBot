@@ -1,7 +1,8 @@
 <%- include('./_head.ejs', { id: null, page: 'login' }) %>
 
+<div class="card responsive">
+<h2 class="title">로그인</h2>
 <main>
-  <h2 class="title">로그인</h2>
   <form id="login-form">
     <label for="username">사용자 이름</label>
     <input type="text" name="username" placeholder="사용자 이름 입력" required>
@@ -11,5 +12,6 @@
     <button type="submit">로그인</button> 혹은 <a href="/register">가입하기</a>
   </form>
 </main>
+</div>
 
 <%- include('./_tail.ejs') %>

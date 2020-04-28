@@ -54,7 +54,6 @@ router.get('/register', (req, res) => {
     privacy: 'Privacy Policy goes here',
     discordAuth: req.session.regDiscordOAuthData
   })
-  // req.session.regDiscordOAuth = false
 })
 
 router.post('/register', (req, res) => {

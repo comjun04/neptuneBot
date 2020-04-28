@@ -115,8 +115,15 @@ body, head {
   float: right;
 }
 
+@media screen and (min-width: 800px) {
+  .responsive {
+    width: 60%;
+    margin: 50px auto;
+  }
+}
+
 main {
-  padding: 20px;
+  padding: 20px 10px;
 }
 
 footer {
