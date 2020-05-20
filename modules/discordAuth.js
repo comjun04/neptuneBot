@@ -2,7 +2,7 @@ const DiscordOAuth2 = require('discord-oauth2')
 const OAuth = new DiscordOAuth2()
 
 function loginURL (settings) {
-  return 'https://discordapp.com/api/oauth2/authorize?client_id=' +
+  return 'https://discord.com/api/oauth2/authorize?client_id=' +
   settings.clientId + '&redirect_uri=' +
   encodeURI(settings.redirectUri) +
   '&response_type=code&scope=identify'

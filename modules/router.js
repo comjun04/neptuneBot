@@ -1,8 +1,13 @@
 const express = require('express')
 const router = express.Router()
 
+const { sha256 } = require('js-sha256')
+const Flake = require('flake-idgen')
+
 const discordAuth = require('./discordAuth')
 const settings = require('../settings.json')
+
+const specialChars = [' ', '!', '"', '#', '$', '%', '&', '\'', '(', ')', '*', '+', ',', '-', '.', '/', ':', ';', '9', '<', '=', '>', '?', '@', '[', '\\', ']', '^', '_', '`', '{' , '|', '}', '~']
 
 // Remove register OAuth flag
 // when the user gets out of register page
@@ -10,7 +15,6 @@ const settings = require('../settings.json')
 //
 // First, Backup the value and delete from session
 router.get('*', (req, _res, next) => {
-  console.log(req.session)
   req.registerStep = req.session.registerStep
   req.regDiscordOAuth = req.session.regDiscordOAuth
   req.regDiscordOAuthData = req.session.regDiscordOAuthData
@@ -23,8 +27,8 @@ router.get('*', (req, _res, next) => {
 // If the requested page matches to the registration flow, restore it
 router.get(['/register',
   '/register/discord',
+  '/register/checkuser',
   '/login/discord/callback'], (req, _res, next) => {
-  console.log('rest')
   req.session.registerStep = req.registerStep || 1
   req.session.regDiscordOAuth = req.regDiscordOAuth
   req.session.regDiscordOAuthData = req.regDiscordOAuthData
@@ -56,7 +60,7 @@ router.get('/register', (req, res) => {
   })
 })
 
-router.post('/register', (req, res) => {
+router.post('/register', async (req, res) => {
   if (req.session.userID) { res.redirect('/'); return }
   switch (req.session.registerStep) {
     case 1:
@@ -64,7 +68,7 @@ router.post('/register', (req, res) => {
         res.redirect('./register')
         return
       }
-      req.session.registerStep++
+      req.session.registerStep = 2
       break
     case 2:
       if (req.session.regDiscordOAuthData == null || typeof req.session.regDiscordOAuthData !== 'object') {
@@ -74,6 +78,59 @@ router.post('/register', (req, res) => {
         req.session.registerStep = 3
       }
       break
+    case 3: {
+      // Actual Registration
+      const username = req.body.uname
+      const password = req.body.password
+
+      if(req.dataMgr.accounts.has(username)) break
+      let ur = true
+      username.split('').forEach(function(c) {
+        if(!/[a-zA-Z0-9_-]/.test(c)) ur = false
+      })
+      if(!ur) break
+
+      if(password.length < 8) break
+      let cap = false, low = false, num = false, ch = false, other = false
+      password.split('').forEach(function(c) {
+        if(!/^[0-9A-Za-z]$/.test(c) && !specialChars.includes(c)) other = true
+        else if(/^[0-9]$/.test(c)) num = true
+        else if(/^[a-z]$/.test(c)) low = true
+        else if(/^[A-Z]$/.test(c)) cap = true
+        else if(specialChars.includes(c)) ch = true
+      })
+      if(other || !cap || !low || !num || !ch) break
+
+      console.log('ok')
+      // Account Register Process
+      const flake = new Flake({
+        epoch: 1546300800000, // 2019/1/1 0:0:0 UTC
+        datacenter: 0, // 0: User ID
+        worker: 0 // 0: Generated when signup normally
+      })
+
+      const getFlake = async () => {
+        return new Promise((resolve, reject) => {
+          flake.next((err, id) => {
+            if(err) reject(err)
+            else resolve(parseInt('0x' + id.toString('hex')))
+          })
+        })
+      }
+
+      const id = await getFlake()
+      const hashpw = sha256(password)
+      req.dataMgr.accounts.set(id, {
+        username,
+        password: hashpw,
+        OAuth: { discord: req.session.regDiscordOAuthData.id }
+      })
+      req.dataMgr.discord.set(req.session.regDiscordOAuthData.id, req.session.regDiscordOAuthData)
+      
+      console.log('[Account Registration] id: ' + id + ' / username: ' + username)
+      req.session.registerStep = 4
+      break
+    }
     default:
       res.redirect('./register')
       return
@@ -106,7 +163,7 @@ router.get('/login/discord/callback', async (req, res) => {
     // Check if this callback was made in registration
     if (req.session.regDiscordOAuth) {
       // Duplication check
-      if (req.dataMgr.discord[d.userData.id]) {
+      if (req.dataMgr.discord.has(d.userData.id)) {
         req.session.regDiscordOAuthData = false
         res.redirect('/register')
       } else {
@@ -115,12 +172,15 @@ router.get('/login/discord/callback', async (req, res) => {
       }
     } else {
       // TODO WIP
+      /*
       if (!req.authData[d.userData.id]) req.authData[d.userData.id] = d.userData
       req.session.userID = d.userData.id
 
       // Logged in. Redirect to Main Page.
       // TODO redirect_url support
       res.redirect('/')
+      */
+      res.send('REGISTER OAUTH FAIL')
     }
   }).catch((err) => {
     console.error(err)
@@ -131,11 +191,15 @@ router.get('/login/discord/callback', async (req, res) => {
 
 // Redirect to Discord OAuth2 (Register)
 router.get('/register/discord', (req, res) => {
-  console.log(req.session)
   if (req.session.registerStep === 2) {
     req.session.regDiscordOAuth = true
     res.redirect(discordAuth.loginURL(settings.auth))
   } else res.redirect('/')
+})
+
+router.get('/register/checkuser', (req, res) => {
+  if(req.dataMgr.accounts.has(req.query.name)) res.send('Exist')
+  else res.send('Not Exist')
 })
 
 // Old code support

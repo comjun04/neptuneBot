@@ -55,7 +55,7 @@ app.use(session({
 
 app.use(bodyParser.urlencoded({ extended: false }))
 
-// Include authData to req object
+// Include data to req object
 app.use((req, _res, next) => {
   req.dataMgr = dataMgr
   next()

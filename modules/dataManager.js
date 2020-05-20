@@ -1,15 +1,19 @@
 const fs = require('fs')
 const path = require('path')
 
-const accounts = require('../data/accounts.json')
-const discord = require('../data/discord.json')
-const google = require('../data/google.json')
+const a = require('../data/accounts.json'),
+  d = require('../data/discord.json'),
+  g = require('../data/google.json')
+const accounts = a.length > 0 ? new Map(a) : new Map(),
+  discord = d.length > 0 ? new Map(d) : new Map(),
+  google = g.length > 0 ? new Map(g) : new Map()
 
 function startAutosave () {
   setInterval(() => {
-    fs.writeFileSync(path.join(path.resolve(), 'data', 'accounts.json'), JSON.stringify(accounts))
-    fs.writeFileSync(path.join(path.resolve(), 'data', 'discord.json'), JSON.stringify(discord))
-    fs.writeFileSync(path.join(path.resolve(), 'data', 'google.json'), JSON.stringify(google))
+    fs.writeFileSync(path.join(path.resolve(), 'data', 'accounts.json'), JSON.stringify(Array.from(accounts)))
+    fs.writeFileSync(path.join(path.resolve(), 'data', 'discord.json'), JSON.stringify(Array.from(discord)))
+    fs.writeFileSync(path.join(path.resolve(), 'data', 'google.json'), JSON.stringify(Array.from(google)))
+    console.log('All Data saved')
   }, 60000)
 }
 

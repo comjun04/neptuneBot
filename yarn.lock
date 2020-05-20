@@ -312,10 +312,10 @@ destroy@~1.0.4:
   resolved "https://registry.yarnpkg.com/destroy/-/destroy-1.0.4.tgz#978857442c44749e4206613e37946205826abd80"
   integrity sha1-l4hXRCxEdJ5CBmE+N5RiBYJqvYA=
 
-discord-oauth2@^2.0.2:
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/discord-oauth2/-/discord-oauth2-2.0.2.tgz#7a7aa8706b2554e0024d038501589489f891b743"
-  integrity sha512-35ANRmEEPhtvkrkL70OslGAq+ztFpmDEU5x3K0yiq2NCiNp/gszvRI+rJyNeIvI3OCKCSGIcqrhYZ0daowYn4Q==
+discord-oauth2@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/discord-oauth2/-/discord-oauth2-2.2.0.tgz#2135a4ec5142a08bd0d927e8e17c41b2392f236d"
+  integrity sha512-lLlY1nC/05NuOHOGfWqKlrF0RKIgRazQ6e6TdfqNJ41K3ftaVpcfVWZoJlzKXeADuvoK3CpEFkm2UeX/vRSqkw==
 
 discord.js@^11.5.1:
   version "11.5.1"
@@ -706,6 +706,11 @@ find-up@^2.0.0, find-up@^2.1.0:
   dependencies:
     locate-path "^2.0.0"
 
+flake-idgen@^1.4.0:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/flake-idgen/-/flake-idgen-1.4.0.tgz#a89db0f987d83e33b88bf9a8ac1a26d0c0b03b63"
+  integrity sha512-l+dtBcIAwAPqmtDelZAAw0NzKOBosiu/3hAFH69W3n1rH8wkKN1hUp6SaR1tmH/NmzaCUQs1BFKULKVhqGWdMw==
+
 flat-cache@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/flat-cache/-/flat-cache-2.0.1.tgz#5d296d6f04bda44a4630a301413bdbc2ec085ec0"
@@ -976,6 +981,11 @@ isexe@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/isexe/-/isexe-2.0.0.tgz#e8fbf374dc556ff8947a10dcb0572d633f2cfa10"
   integrity sha1-6PvzdNxVb/iUehDcsFctYz8s+hA=
+
+js-sha256@^0.9.0:
+  version "0.9.0"
+  resolved "https://registry.yarnpkg.com/js-sha256/-/js-sha256-0.9.0.tgz#0b89ac166583e91ef9123644bd3c5334ce9d0966"
+  integrity sha512-sga3MHh9sgQN2+pJ9VYZ+1LPwXOxuBJBA5nrR5/ofPfuiJBE2hnjsaN8se8JznOmGLN2p49Pe5U/ttafcs/apA==
 
 js-tokens@^4.0.0:
   version "4.0.0"
