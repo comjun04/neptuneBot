@@ -7,7 +7,7 @@ const Flake = require('flake-idgen')
 const discordAuth = require('./discordAuth')
 const settings = require('../settings.json')
 
-const specialChars = [' ', '!', '"', '#', '$', '%', '&', '\'', '(', ')', '*', '+', ',', '-', '.', '/', ':', ';', '9', '<', '=', '>', '?', '@', '[', '\\', ']', '^', '_', '`', '{' , '|', '}', '~']
+const specialChars = [' ', '!', '"', '#', '$', '%', '&', '\'', '(', ')', '*', '+', ',', '-', '.', '/', ':', ';', '9', '<', '=', '>', '?', '@', '[', '\\', ']', '^', '_', '`', '{', '|', '}', '~']
 
 // Remove register OAuth flag
 // when the user gets out of register page
@@ -83,23 +83,23 @@ router.post('/register', async (req, res) => {
       const username = req.body.uname
       const password = req.body.password
 
-      if(req.dataMgr.accounts.has(username)) break
+      if (req.dataMgr.accounts.has(username)) break
       let ur = true
-      username.split('').forEach(function(c) {
-        if(!/[a-zA-Z0-9_-]/.test(c)) ur = false
+      username.split('').forEach(function (c) {
+        if (!/[a-zA-Z0-9_-]/.test(c)) ur = false
       })
-      if(!ur) break
+      if (!ur) break
 
-      if(password.length < 8) break
-      let cap = false, low = false, num = false, ch = false, other = false
-      password.split('').forEach(function(c) {
-        if(!/^[0-9A-Za-z]$/.test(c) && !specialChars.includes(c)) other = true
-        else if(/^[0-9]$/.test(c)) num = true
-        else if(/^[a-z]$/.test(c)) low = true
-        else if(/^[A-Z]$/.test(c)) cap = true
-        else if(specialChars.includes(c)) ch = true
+      if (password.length < 8) break
+      let cap = false; let low = false; let num = false; let ch = false; let other = false
+      password.split('').forEach(function (c) {
+        if (!/^[0-9A-Za-z]$/.test(c) && !specialChars.includes(c)) other = true
+        else if (/^[0-9]$/.test(c)) num = true
+        else if (/^[a-z]$/.test(c)) low = true
+        else if (/^[A-Z]$/.test(c)) cap = true
+        else if (specialChars.includes(c)) ch = true
       })
-      if(other || !cap || !low || !num || !ch) break
+      if (other || !cap || !low || !num || !ch) break
 
       console.log('ok')
       // Account Register Process
@@ -112,7 +112,7 @@ router.post('/register', async (req, res) => {
       const getFlake = async () => {
         return new Promise((resolve, reject) => {
           flake.next((err, id) => {
-            if(err) reject(err)
+            if (err) reject(err)
             else resolve(parseInt('0x' + id.toString('hex')))
           })
         })
@@ -126,7 +126,7 @@ router.post('/register', async (req, res) => {
         OAuth: { discord: req.session.regDiscordOAuthData.id }
       })
       req.dataMgr.discord.set(req.session.regDiscordOAuthData.id, req.session.regDiscordOAuthData)
-      
+
       console.log('[Account Registration] id: ' + id + ' / username: ' + username)
       req.session.registerStep = 4
       break
@@ -198,7 +198,7 @@ router.get('/register/discord', (req, res) => {
 })
 
 router.get('/register/checkuser', (req, res) => {
-  if(req.dataMgr.accounts.has(req.query.name)) res.send('Exist')
+  if (req.dataMgr.accounts.has(req.query.name)) res.send('Exist')
   else res.send('Not Exist')
 })
 

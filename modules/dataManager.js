@@ -1,12 +1,12 @@
 const fs = require('fs')
 const path = require('path')
 
-const a = require('../data/accounts.json'),
-  d = require('../data/discord.json'),
-  g = require('../data/google.json')
-const accounts = a.length > 0 ? new Map(a) : new Map(),
-  discord = d.length > 0 ? new Map(d) : new Map(),
-  google = g.length > 0 ? new Map(g) : new Map()
+const a = require('../data/accounts.json')
+const d = require('../data/discord.json')
+const g = require('../data/google.json')
+const accounts = a.length > 0 ? new Map(a) : new Map()
+const discord = d.length > 0 ? new Map(d) : new Map()
+const google = g.length > 0 ? new Map(g) : new Map()
 
 function startAutosave () {
   setInterval(() => {
