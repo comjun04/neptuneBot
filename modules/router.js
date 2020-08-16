@@ -44,7 +44,17 @@ router.get('/', (req, res) => {
 router.get('/login', (req, res) => {
   // Redirect when logged in
   if (req.session.userID) res.redirect('/')
-  else res.render('login')
+  else res.render('login', { failed: false })
+})
+
+router.post('/login', (req, res) => {
+  const { username, password } = req.body
+
+  const udata = Array.from(req.dataMgr.accounts).find((d) => d[1].username === username)
+  if(udata && udata[1].password === sha256(password)) {
+    req.session.userID = udata[0]
+    res.redirect('/')
+  } else res.render('login', { failed: true })
 })
 
 // Register Page

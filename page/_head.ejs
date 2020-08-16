@@ -20,9 +20,15 @@
       <li id="topbar_account">
         <span id="topbar_account_item" class="topbar-item nav-dropdown-keep-show">계정</span>
         <div id="topbar_account_content" class="nav-dropdown-content nav-dropdown-keep-show">
+          <% if(!id) { %>
           <a href="./login" id="topbar_account_login" class="card">
-            <span><% if(!id) { %>다양한 기능을 이용하시려면 <b><u>로그인</u></b>하세요.<% } else { %>현재 로그인된 id: <%= id %><% } %></span>
+            <span>다양한 기능을 이용하시려면 <b><u>로그인</u></b>하세요.</span>
           </a>
+          <% } else { %>
+          <div class="card">
+            <span><%= user %></span>
+          </div>
+          <% } %>
         </div>
       </li>
     </ul>
