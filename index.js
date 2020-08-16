@@ -1,15 +1,19 @@
 const { readFileSync, writeFileSync } = require('fs')
-const { renderFile } = require('ejs')
 const cors = require('cors')
 const path = require('path').resolve()
 const https = require('https')
 const express = require('express')
+const session = require('express-session')
+const MemoryStore = require('memorystore')(session)
+const bodyParser = require('body-parser')
 const { Client } = require('discord.js')
 const DiscordOAuth2 = require('discord-oauth2')
 
 const authCheck = require('./auth')
 // const pointModule = require('./modules/point')
 const commandModule = require('./modules/command')
+const webRouter = require('./modules/router')
+const dataMgr = require('./modules/dataManager')
 
 const settings = require(path + '/settings.json')
 const authData = require(path + '/auth/authData.json')
@@ -33,11 +37,38 @@ if (!settings.development) ssl = { cert: readFileSync(path + '/auth/teaddy-cert.
 
 const discordOAuth = new DiscordOAuth2()
 
+dataMgr.startAutosave()
+
+// Web
+app.set('view engine', 'ejs')
+app.set('views', './page')
+
+app.use(session({
+  name: 'teaddy-session',
+  resave: false,
+  saveUninitialized: false,
+  secret: 'keyboard cat', // TODO load from settings.json
+  store: new MemoryStore({
+    checkPeriod: 1000 * 3600 // 1 hour
+  })
+}))
+
+app.use(bodyParser.urlencoded({ extended: false }))
+
+// Include data to req object
+app.use((req, _res, next) => {
+  req.dataMgr = dataMgr
+  next()
+})
+
 app.use(cors())
 app.use('/src', express.static(path + '/src'))
 
-app.get('/', (_req, res) => res.redirect('/login'))
-app.get('/login', async (req, res) => {
+// Main Router (WIP)
+app.use(webRouter)
+
+// Old Login Page
+app.get('/oldlogin', async (req, res) => {
   let key = req.query.key ? req.query.key.split(';') : []
   let discordData = {}
   try {
@@ -45,10 +76,7 @@ app.get('/login', async (req, res) => {
   } catch (err) {
     key = []
   }
-  renderFile(path + '/page/login.ejs', { key, authUrl, authData, discordData }, (err, str) => {
-    if (err) console.log(err)
-    else res.send(str)
-  })
+  res.render('oldlogin', { key, authUrl, authData, discordData })
 })
 
 app.get('/solve', (_req, res) => res.send({ items: ['discord', 'google'] }))
@@ -58,13 +86,13 @@ app.get('/solve/:item', (req, res) => {
 
   code = code.split(';')
 
-  if (code[0].length <= 0) res.redirect('/login')
+  if (code[0].length <= 0) res.redirect('/oldlogin')
   else {
     switch (item) {
       case 'discord':
         authCheck.discord(settings.auth, code, discordOAuth).then((returnData) => {
           authData[returnData.token] = { discord: returnData.userData, verified: false }
-          res.redirect('/login?key=' + returnData.token)
+          res.redirect('/oldlogin?key=' + returnData.token)
         }).catch((err) => {
           console.error(err)
           res.sendStatus(500)
@@ -72,7 +100,7 @@ app.get('/solve/:item', (req, res) => {
         break
 
       case 'google':
-        if (code.length !== 2) res.redirect('/login')
+        if (code.length !== 2) res.redirect('/oldlogin')
         if (!Object.keys(authData).includes(code[0])) res.redirect('/login')
         else {
           authCheck.google(code[1]).then((data) => {
@@ -80,7 +108,7 @@ app.get('/solve/:item', (req, res) => {
             else {
               authData[code[0]].google = data.body
               authData[code[0]].verified = false
-              res.redirect('/login?key=' + code[0] + ';' + code[1])
+              res.redirect('/oldlogin?key=' + code[0] + ';' + code[1])
             }
           }).catch(() => { res.sendStatus(401) })
         }
@@ -133,6 +161,7 @@ bot.login(settings.token)
     }
   })
 
+// TODO Delete
 setInterval(() => { writeFileSync(path + '/auth/authData.json', JSON.stringify(authData)) }, 1000)
 
 // Register Events

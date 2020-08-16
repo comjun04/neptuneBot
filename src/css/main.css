@@ -1,3 +1,13 @@
+@font-face {
+  font-family: 'CookieRunOTF-Bold';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_twelve@1.0/CookieRunOTF-Bold00.woff') format('woff');   font-weight: normal;
+  font-style: normal;
+}
+
+html {
+  font-family: 'CookieRunOTF-Bold', 맑은 고딕, MS Gothic;
+}
+
 body, head {
   margin: 0px;
   padding: 0px;
@@ -5,7 +15,9 @@ body, head {
   width: 100%;
   height: 100%;
 }
-  
+
+/* Old Login Page */
+
 .centerBox {
   margin: 10vh auto;
 }
@@ -18,4 +30,162 @@ body, head {
     top: 50%;
     transform: translate(-50%, -50%);
   }
+}
+
+/* New Website */
+#topbar {
+  background-color: #83bfff;
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  overflow: hidden;
+}
+
+#topbar li {
+  float: left;
+  color: white;
+}
+
+#topbar li .topbar-item {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  margin: 0;
+  text-decoration: none;
+}
+
+/* Change the link color to #111 (black) on hover */
+#topbar li .topbar-item:hover {
+  background-color: #111;
+  transition: .3s
+}
+
+#topbar li h3 {
+  margin: 0;
+  padding: 0;
+}
+
+#topbar_account {
+  float: right!important;
+}
+
+#topbar_account_login {
+  cursor: pointer;
+  padding: 14px 16px;
+  margin: 0;
+  display: block;
+  text-decoration: none;
+  color: black;
+}
+
+#topbar_account_login:hover {
+  background-color: #ddd;
+  transition: .3s
+}
+
+.nav-dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  color: black;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+  right: 0;
+  margin: 10px;
+}
+
+.nav-dropdown-show {
+  display: block;
+}
+
+.title {
+  font-size: 50px;
+  padding: 20px
+}
+
+.card {
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  display: block;
+  padding: 8px 14px;
+}
+
+.right {
+  float: right;
+}
+
+@media screen and (min-width: 800px) {
+  .responsive {
+    width: 60%;
+    margin: 50px auto;
+  }
+}
+
+main {
+  padding: 20px 10px;
+}
+
+footer {
+  background-color: #ccc;
+  bottom: 0;
+  padding: 10px
+}
+
+/* Form: Full-width inputs */
+input[type=text], input[type=password], textarea {
+  width: 100%;
+  padding: 12px 10px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 2px solid #000;
+  box-sizing: border-box;
+  font-family: inherit;
+  transition: border-color,background-color .5s
+}
+
+input[type=text].error, input[type=password].error {
+  background-color: #fed0d0;
+  border-color: #f00;
+}
+
+input[type=text].success, input[type=password].success {
+  background-color: #d0fed0;
+  border-color: #0f0;
+}
+
+/* Disable custom font */
+.default-text {
+  font-family: 맑은 고딕, MS Gothic;
+}
+
+/* Set a style for all buttons */
+button, .btn {
+  background-color: #4CAF50;
+  color: white;
+  display: inline-block;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  font-family: inherit;
+  text-decoration: none;
+}
+button:disabled, .btn:disabled {
+  background-color: grey;
+}
+
+/* Link style */
+a {
+  color: black;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+}
+
+.btn-discord {
+  background-color: #7289da;
+  color: white;
 }
